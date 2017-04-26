@@ -4,12 +4,15 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
   <servlet>
     <servlet-class>tania.MyFirstServlet</servlet-class>
     <servlet-name>MyFirstServlet</servlet-name>
-    <servlet-mapping>
-      <servlet-name>MyFirstServlet</servlet-name>
-      <url-pattern>/*</url-pattern>
-    </servlet-mapping>
   </servlet>
+  <servlet-mapping>
+    <servlet-name>MyFirstServlet</servlet-name>
+    <url-pattern>/MyFirstServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
