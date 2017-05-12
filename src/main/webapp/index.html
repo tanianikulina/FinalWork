@@ -10,21 +10,35 @@
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<div class="container-fluid" style="height: 100%;">
-    <h1>Chat </h1>
-    <div class="row chat_messages_form" style="height: 75%; margin-bottom: 10px;">
-        <div class="col-xs-12" style="height: 100%;">
-            <textarea style="height: 100%; width: 100%;" readonly class="chat_messages_list"></textarea>
+    <div class="container-fluid" style="height: 100%;">
+        <h1>Chat </h1>
+        <div class="row chat_messages_form" style="height: 75%; margin-bottom: 10px;">
+            <div class="col-xs-12" style="height: 100%;">
+                <textarea style="height: 100%; width: 100%;" readonly class="chat_messages_list"></textarea>
+            </div>
+        </div>
+        <div class="row chat_messages_form">
+            <div class="col-xs-10">
+                <input type="text" class="form-control chat_new_message" style="width: 100%;" maxlength="1000">
+            </div>
+            <div class="col-xs-2">
+                <button type="button" class="btn btn-primary chat_submit_button">Отправить</button>
+            </div>
         </div>
     </div>
-    <div class="row chat_messages_form">
-        <div class="col-xs-10">
-            <input type="text" class="form-control chat_new_message" style="width: 100%;" maxlength="1000">
-        </div>
-        <div class="col-xs-2">
-            <button type="button" class="btn btn-primary chat_submit_button">Отправить</button>
-        </div>
+
+    <div class="row chat_login_form">
+        <label class="col-xs-6">
+            Your login:
+            <input class="form-control chat_login_form_login" type="text">
+        </label>
+        <label class="col-xs-6">
+            Your password:
+            <input class="form-control chat_login_form_password" type="text">
+        </label>
+        <button class="btn btn-primary chat_login_form_button" type="button">
+            Authorize
+        </button>
     </div>
-</div>
 </body>
 </html>

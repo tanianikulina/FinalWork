@@ -1,13 +1,13 @@
 function sendMessage(message) {
     jQuery.post("/messages", message, function () {
     getNewMessages();
-    }, "application/json")
+    }, "application/json");
 }
 
 function updateMessagesList(newMessages) {
     var currentMessagesList = jQuery(".chat_messages_list");
-    //var currentMessages = currentMessagesList.val();
-    var currentMessages = "";
+    var currentMessages = currentMessagesList.val();
+    //var currentMessages = "";
     var newMessageList = JSON.parse(newMessages);
     newMessages.forEach(function (message) {
         currentMessages += message + "\n";
@@ -34,3 +34,15 @@ jQuery(document).ready(function () {
     });
     setInterval(getNewMessages, 5000)
 });
+
+function authorize() {
+    jQuery.post("/auth", {
+        login: jQuery(".chat_login_form_login").val();
+        password: jQuery(".chat_login_form_password").val();
+    }, function(result) {
+        token = result;
+        jQuery(".chat_login_form").hide();
+        jQuery(".chat_messages_form").show();
+        getOldMessages();
+    });
+}

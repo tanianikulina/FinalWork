@@ -4,15 +4,20 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-  </welcome-file-list>
   <servlet>
     <servlet-class>tania.MyFirstServlet</servlet-class>
     <servlet-name>MyFirstServlet</servlet-name>
   </servlet>
+  <servlet>
+    <servlet-class>tania.AuthorizationServlet</servlet-class>
+    <servlet-name>AuthorizationServlet</servlet-name>
+  </servlet>
   <servlet-mapping>
     <servlet-name>MyFirstServlet</servlet-name>
-    <url-pattern>/messages/</url-pattern>
+    <url-pattern>/messages/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AuthorizationServlet</servlet-name>
+    <url-pattern>/auth/*</url-pattern>
   </servlet-mapping>
 </web-app>
