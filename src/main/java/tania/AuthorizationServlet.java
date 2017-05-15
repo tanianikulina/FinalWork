@@ -1,7 +1,6 @@
 package tania;
 
 import javax.servlet.http.*;
-import java.sql.*;
 
 public class AuthorizationServlet extends HttpServlet{
     @Override

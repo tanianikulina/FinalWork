@@ -13,7 +13,7 @@ public class DBStuff {
         this.connection = connection;
     }
     public String check(String  login, String password) throws SQLException {
-        PreparedStatement select = connection.prepareStatement("SELECT * FROM loginsPasswords WHERE login= ? AND password = ?");
+        PreparedStatement select = connection.prepareStatement("SELECT * FROM loginsPasswordsNew WHERE login= ? AND password = ?");
         select.setString(1, login);
         select.setString(2, password);
         ResultSet resultSet = select.executeQuery();
@@ -23,12 +23,19 @@ public class DBStuff {
     }
 
     public ResultSet getMessages() throws SQLException {
-        PreparedStatement select = connection.prepareStatement("SELECT = * FROM messages");
+        PreparedStatement select = connection.prepareStatement("SELECT = * FROM messageHistory");
+        return select.executeQuery();
+    }
+
+    ResultSet getMessages(String timestamp) throws SQLException {
+        PreparedStatement select = connection.prepareStatement("SELECT * FROM messageHistory WHERE time > CAST(? AS TIMESTAMP)");
+        select.setString(1, timestamp);
+        System.out.println(select.toString());
         return select.executeQuery();
     }
 
     public String getAuthor(UUID token) throws SQLException {
-        PreparedStatement select = connection.prepareStatement("SELECT * FROM  loginsPasswords WHERE token = ?");
+        PreparedStatement select = connection.prepareStatement("SELECT * FROM  loginsPasswordsNew WHERE token = ?");
         select.setObject(1, token);
         ResultSet resultSet = select.executeQuery();
         resultSet.next();
@@ -36,7 +43,7 @@ public class DBStuff {
     }
 
     public void putMessage(UUID token, String message, Instant time) throws SQLException {
-        PreparedStatement insert = connection.prepareStatement("INSERT INTO messages (token, message, time) VALUES (?, ?, ?)");
+        PreparedStatement insert = connection.prepareStatement("INSERT INTO messageHistory (token, message, time) VALUES (?, ?, ?)");
         insert.setObject(1, token);
         insert.setObject(2, message);
         insert.setObject(3, Timestamp.from(time));

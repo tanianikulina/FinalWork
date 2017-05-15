@@ -2,20 +2,18 @@ package tania;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
-import java.awt.*;
 import java.io.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.Instant;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class MyFirstServlet extends HttpServlet {
 
-    ConcurrentHashMap <Instant, String> messages = new ConcurrentHashMap<>();
-    DBStuff db;
-    UUID token;
+    private DBStuff db = new DBStuff();
+
+    public MyFirstServlet() throws SQLException, ClassNotFoundException {
+    }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 //        response.setStatus(200);
@@ -25,35 +23,26 @@ public class MyFirstServlet extends HttpServlet {
         responseText.append("[");
         ResultSet resultSet = null;
 
-        List<String> asList = Arrays.asList(request.getQueryString().split("&"));
-        String [] tokens;
         List<String> messagesList = new ArrayList<>();
-        tokens = asList.get(1).split("=");
-        token = UUID.fromString(tokens[1]);
         try {
             resultSet = db.getMessages();
             while (resultSet.next())
-                messagesList.add(db.getAuthor(UUID.fromString(resultSet.getString("token"))));
+                messagesList.add(db.getAuthor(UUID.fromString(resultSet.getString("token"))) + " (" + resultSet.getString("time").substring(3, 19)+ "): " +  resultSet.getString("message"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
         if (messagesList.size() > 0) {
-            messagesList.stream().limit(messagesList.size()-1).forEach((message) -> {
-                responseText.append("\"" + message + "\",");
-            });
+            messagesList.stream().limit(messagesList.size() - 1).forEach((message) -> responseText.append("\"").append(message).append("\","));
             responseText.append("\"" + messagesList.get(messagesList.size() - 1) + "\"");
         }
         responseText.append("]");
         response.getWriter().write(responseText.toString());
+        //response.setStatus(200);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String message = "";
-        try {
-            message = request.getReader().readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String message = request.getParameter("message");
+        UUID token = UUID.fromString(request.getParameter("token"));
         if (message.length() > 0) {
             try {
                 db.putMessage(token, message, Instant.now());
