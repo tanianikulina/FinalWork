@@ -9,9 +9,9 @@ public class DBStuff {
 
     public DBStuff() throws ClassNotFoundException, SQLException {
         Class.forName("org.postgresql.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:postgresql://194.87.187.238/nikulina", "nikulina", "nikulina");
-        this.connection = connection;
+        connection = DriverManager.getConnection("jdbc:postgresql://194.87.187.238/nikulina", "nikulina", "nikulina");
     }
+
     public String check(String  login, String password) throws SQLException {
         PreparedStatement select = connection.prepareStatement("SELECT * FROM loginsPasswordsNew WHERE login= ? AND password = ?");
         select.setString(1, login);
@@ -23,7 +23,7 @@ public class DBStuff {
     }
 
     public ResultSet getMessages() throws SQLException {
-        PreparedStatement select = connection.prepareStatement("SELECT = * FROM messageHistory");
+        PreparedStatement select = connection.prepareStatement("SELECT token, message, time FROM messageHistory");
         return select.executeQuery();
     }
 
