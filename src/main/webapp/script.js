@@ -9,9 +9,8 @@ function sendMessage(message) {
 
 function updateMessagesList(newMessages) {
     var currentMessagesList = jQuery(".chat_messages_list");
+    jQuery(".chat_messages_list").val("");
     var currentMessages = currentMessagesList.val();
-    //var currentMessages = "";
-    console.log(newMessages.toString());
     newMessages.forEach(function (message) {
         currentMessages += message + "\n";
     });
@@ -22,17 +21,6 @@ function updateMessagesList(newMessages) {
 }
 
 function getNewMessages() {
-    var now = (new Date()).toISOString();
-    jQuery.get("/messages?date_time=" + now + "&token=" + token,  null, function (newMessages) {
-        //console.log(newMessages.toString());
-        updateMessagesList(newMessages);
-    });
-//    jQuery.get("/messages", null, function (newMessages) {
-//    updateMessagesList(newMessages);
-//    });
-}
-
-function getOldMessages() {
     jQuery.get("/messages", null, function (newMessages) {
         updateMessagesList(newMessages);
     });
@@ -55,8 +43,14 @@ function authorize() {
         token = result;
         jQuery(".chat_login_form").hide();
         jQuery(".chat_messages_form").show();
-        getOldMessages();
-        setInterval(getNewMessages, 12000)
+        jQuery.get("/messages", null, function (newMessages) {
+            currentMessages = "";
+            newMessages.forEach(function (message) {
+                currentMessages += message + "\n";
+            });
+            jQuery(".chat_messages_list").val(currentMessages);
+        });
+        setInterval(getNewMessages, 2000);
     });
 }
 
