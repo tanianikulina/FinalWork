@@ -11,7 +11,6 @@ import java.util.List;
 public class MyFirstServlet extends HttpServlet {
 
     private DBStuff db = new DBStuff();
-    UUID token;
 
     public MyFirstServlet() throws SQLException, ClassNotFoundException {
     }
@@ -28,7 +27,7 @@ public class MyFirstServlet extends HttpServlet {
         try {
             resultSet = db.getMessages();
             while (resultSet.next())
-                messagesList.add(resultSet.getString("time") + " " + db.getAuthor(UUID.fromString(resultSet.getString("token"))) + ": " + resultSet.getString("message"));
+                messagesList.add(resultSet.getString("time") + " " + resultSet.getString("login")+ " " + resultSet.getString("message"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -42,11 +41,11 @@ public class MyFirstServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        token = UUID.fromString(request.getParameter("token"));
+        UUID token = UUID.fromString(request.getParameter("token"));
         String message = request.getParameter("message");
         if (message.length() > 0) {
             try {
-                db.putMessage(token, message, Instant.now());
+                db.putMessage(login, message, Instant.now());
             } catch (Exception e) {
                 e.printStackTrace();
             }

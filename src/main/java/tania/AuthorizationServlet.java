@@ -1,6 +1,7 @@
 package tania;
 
 import javax.servlet.http.*;
+import java.util.UUID;
 
 public class AuthorizationServlet extends HttpServlet{
     @Override
@@ -8,11 +9,12 @@ public class AuthorizationServlet extends HttpServlet{
         String login = request.getParameter("login");
         String password = request.getParameter("password");
         try {
+            UUID token = UUID.randomUUID();
             DBStuff db = new DBStuff();
-            String result = db.check(login, password);
-            if (result != null) {
+            Boolean isAuthorized = db.check(login, password);
+            if (isAuthorized) {
                 response.setStatus(200);
-                response.getWriter().write(result);
+                response.getWriter().write(String.valueOf(token));
             } else {
                 response.setStatus(403);
             }
