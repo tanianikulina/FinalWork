@@ -14,10 +14,12 @@ public class AuthorizationServlet extends HttpServlet{
             Boolean isAuthorized = db.check(login, password);
             if (isAuthorized) {
                 response.setStatus(200);
+                db.updateToken(token, login);
                 response.getWriter().write(String.valueOf(token));
             } else {
                 response.setStatus(403);
             }
+            db.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,4 +1,11 @@
 var token = "";
+var tmp = "";
+
+function formatTime(time) {
+    time.setHours(time.getHours() + 3); //почему оно вообще отставало на 3 часа?..
+    time = time.toISOString().replace("T", " ").replace("Z", "");
+    return time;
+}
 
 function sendMessage(message) {
     jQuery.post("/messages", {"message": message, "token": token}, function () {
@@ -9,21 +16,20 @@ function sendMessage(message) {
 
 function updateMessagesList(newMessages) {
     var currentMessagesList = jQuery(".chat_messages_list");
-    jQuery(".chat_messages_list").val("");
     var currentMessages = currentMessagesList.val();
     newMessages.forEach(function (message) {
         currentMessages += message + "\n";
     });
-//    $.each(newMessages, function (message) {
-//        currentMessages += message + "\n";
-//    });
     currentMessagesList.val(currentMessages);
 }
 
 function getNewMessages() {
-    jQuery.get("/messages", null, function (newMessages) {
+    tmp = formatTime(tmp);
+    //console.log(tmp);
+    jQuery.get("/messages", {"time": tmp}, function (newMessages) {
         updateMessagesList(newMessages);
     });
+    tmp = new Date();
 }
 
 jQuery(document).ready(function () {
@@ -41,6 +47,7 @@ function authorize() {
         password: jQuery(".chat_login_form_password").val()
     }, function(result) {
         token = result;
+        tmp = new Date();
         jQuery(".chat_login_form").hide();
         jQuery(".chat_messages_form").show();
         jQuery.get("/messages", null, function (newMessages) {
