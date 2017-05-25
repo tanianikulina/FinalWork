@@ -10,12 +10,11 @@ import java.util.*;
 public class MyFirstServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        StringBuilder responseText = new StringBuilder();
-
-        response.setHeader("Content-type", "application/json:charset=UTF-8");
-        responseText.append("[");
         try {
+            StringBuilder responseText = new StringBuilder();
+
+            response.setHeader("Content-type", "application/json:charset=UTF-8");
+            responseText.append("[");
             ResultSet resultSet;
             List<String> messagesList = new ArrayList<>();
             DBStuff db = new DBStuff();
@@ -31,12 +30,13 @@ public class MyFirstServlet extends HttpServlet {
                 messagesList.stream().limit(messagesList.size() - 1).forEach((message) -> responseText.append("\"").append(message).append("\","));
                 responseText.append("\"").append(messagesList.get(messagesList.size() - 1)).append("\"");
             }
+            responseText.append("]");
+            response.getWriter().write(responseText.toString());
+            response.setStatus(200);
         } catch (Exception e) {
             e.printStackTrace();
+            response.setStatus(500);
         }
-        responseText.append("]");
-        response.getWriter().write(responseText.toString());
-        response.setStatus(200);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
